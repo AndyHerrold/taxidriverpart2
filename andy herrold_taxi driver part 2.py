@@ -94,6 +94,8 @@ class Instructions(simpleGE.Scene):
     def__init__(self):
         super().__init__()
         self.setImage("cityscape.png")
+        self.response = "Quit"
+        self.prevScore = 0
         
         self.directions = simpleGE.MultiLabel()
         self.directions.textlines = [
@@ -107,7 +109,32 @@ class Instructions(simpleGE.Scene):
         self.directions.center = (320, 240)
         self.directions.size = (500, 250)
         
-        self.sprites = [self.directions]
+        self.btnPlay = simpleGE.Button()
+        self.btnPlay.text = "Play"
+        self.btnPlay.center = (100, 400)
+        
+        self.btnQuit = simpleGE.Button()
+        self.btnQuit.text = "Quit"
+        self.btnQuit.center = (550, 400)
+        
+        self.lblScore = simplGE.Label()
+        self.lblScore.text = "Last score: 0"
+        self.lblScore.center = (320, 400)
+        
+        self.sprites = [self.directions, self.btnPlay, self.btnQuit, self.lblScore]
+    def setPrevScore(self, prevScore):
+  
+        self.prevScore = prevScore
+        self.lblScore.text = f"Last score: {self.prevScore}"
+        
+    def process(self):
+        if self.btnPlay.clicked:
+            self.response = "Play"
+            self.stop()
+            
+        if self.btnQuit.clicked:
+            self.response = "Quit"
+            self.stop()
         
         
         
@@ -118,11 +145,23 @@ class Instructions(simpleGE.Scene):
         
     
 def main():
-    instructions = Instructions()
-    instructions.start()
     
-    game = Game()
-    game.start()
+    keepGoing = True
+    while keepGoing:
+        lastScore = 0
+        instructions = Instructions()
+        instructions.setPrevScore(LastScore)
+        instructions.start()
+        
+        if instructions.response == "Play":
+            game = Game()
+            game.start()
+        else:
+            keepGoing = False
+        
+        
+        
+        
 
 if __name__==__ "main__":
     main()
