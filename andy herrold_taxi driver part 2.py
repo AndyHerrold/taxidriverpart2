@@ -44,7 +44,14 @@ Class LblScore(impleGE.Label):
     def__init__(self):
         super().__init__()
         self.text = "Score: 0"
+        
         self.center (100, 30)
+        
+class LblTime(simpleGE.Label):
+    def__init__(self):
+        super().__init__()
+        self.text = "Time left: 10"
+        self.center = (500, 30)
             
         
 class Game(simpleGE.scene):
@@ -54,15 +61,19 @@ class Game(simpleGE.scene):
         self.sndMolly = simpleGE.Sound("molly.wav")
         self.numMollys = 5
         self.score = 0
+        self.lblScore = LblScore()
         
-        self.lblbScore = LblScore()
+        self.timer = simpleGE.Timer()
+        self.timer.totalTime = 10
+        self.lblTime = LblTime()
+        
         self.taxi = Taxi(self)
         self.mollys = []
         for i in range(self.numMollys):
             self.mollys.append(Molly(self))
         
         
-        self.sprites = [self.taxi,self.mollys, self.lblScore]
+        self.sprites = [self.taxi,self.mollys, self.lblScore, self.lblTime]
         
     def process(self):
         for molly in self.mollys:
@@ -72,10 +83,44 @@ class Game(simpleGE.scene):
                 self.sndMolly.play()
                 self.score += 1
                 self.lblScore.text = f"Score: {self.score}"
+                self.lblScore.text = f"Score: {self.score}"
+                
+        self.lblTime.text = f"Time Left: {self.timer.getTimeLeft(): .2f}"
+        if self.timer.getTimeLeft() < 0:
+            print(f"Score: {self.score}")
+            self.stop()
+            
+class Instructions(simpleGE.Scene):
+    def__init__(self):
+        super().__init__()
+        self.setImage("cityscape.png")
+        
+        self.directions = simpleGE.MultiLabel()
+        self.directions.textlines = [
+        "You are the Taxi driver",
+        "Move with the left and right arrow keys.",
+        "Dodge as many Molotov cocktails as you can",
+        "in the time provided"
+        "",
+        "Good Luck!"]
+        
+        self.directions.center = (320, 240)
+        self.directions.size = (500, 250)
+        
+        self.sprites = [self.directions]
+        
+        
+        
+        
+        
+                
 
         
     
 def main():
+    instructions = Instructions()
+    instructions.start()
+    
     game = Game()
     game.start()
 
